@@ -56,11 +56,19 @@ const disabledFlags = [
   'portfolioAdvisory'
 ];
 
+const legal = {
+  disclaimer:
+    'Stock Wallah AI is for education, information, and virtual simulation only. We do not provide investment advice, buy/sell calls, trading tips, portfolio advisory, or guaranteed profits. We are not responsible for real-world financial losses.',
+  shortDisclaimer: 'For education and virtual practice only. Not investment advice.',
+  safeLabels,
+  disabledFlags
+};
+
 app.get('/', (_req, res) => {
   res.json({
     app: 'Stock Wallah AI Backend',
     status: 'ok',
-    message: 'Use /health, /api/indices, /api/lessons, /api/news, or /api/legal/disclaimer.',
+    message: 'Use /health or /api/app-data.',
     disclaimer: DISCLAIMER
   });
 });
@@ -70,6 +78,17 @@ app.get('/health', (_req, res) => {
     app: 'Stock Wallah AI Backend',
     status: 'ok',
     mode: process.env.APP_MODE || 'demo',
+    disclaimer: DISCLAIMER
+  });
+});
+
+app.get('/api/app-data', (_req, res) => {
+  res.json({
+    success: true,
+    indices,
+    lessons,
+    news,
+    legal,
     disclaimer: DISCLAIMER
   });
 });
@@ -101,11 +120,7 @@ app.get('/api/news', (_req, res) => {
 app.get('/api/legal/disclaimer', (_req, res) => {
   res.json({
     success: true,
-    disclaimer:
-      'Stock Wallah AI is for education, information, and virtual simulation only. We do not provide investment advice, buy/sell calls, trading tips, portfolio advisory, or guaranteed profits. We are not responsible for real-world financial losses.',
-    shortDisclaimer: 'For education and virtual practice only. Not investment advice.',
-    safeLabels,
-    disabledFlags
+    ...legal
   });
 });
 
